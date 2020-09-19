@@ -1,18 +1,12 @@
-#----------------------------------------------
-#--- Author         : Ahmet Ozlu
-#--- Mail           : ahmetozlu93@gmail.com
-#--- Date           : 27th January 2018
-#----------------------------------------------
 
-# Imports
 import tensorflow as tf
 
 # Object detection imports
 from utils import backbone
 from api import object_counting_api
 
-# input_video = "./input_images_and_videos/New Office TOUR! Karlie Kloss.mp4"
-input_video = "./input_images_and_videos/The Dancing Traffic Light Manikin by smart.mp4"
+# input_video = "./input_images_and_videos/traffic_light.mp4"
+input_video = 0
 
 # By default I use an "SSD with Mobilenet" model here. See the detection model zoo (https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
 detection_graph, category_index = backbone.set_model('ssd_mobilenet_v1_coco_2018_01_28', 'mscoco_label_map.pbtxt')
@@ -25,13 +19,10 @@ detection_graph, category_index = backbone.set_model('ssd_mobilenet_v1_coco_2018
 targeted_objects = "person" # (for counting targeted objects) change it with your targeted objects
 is_color_recognition_enabled = 0
 roi = 500
-deviation = 10
+deviation = 15
 
 # object_counting_api.targeted_object_counting(input_video, detection_graph, category_index, is_color_recognition_enabled, targeted_objects) # targeted objects counting
 
 object_counting_api.cumulative_object_counting_x_axis(input_video, detection_graph, category_index,
                                                       is_color_recognition_enabled, roi, deviation,
                                                       targeted_objects=targeted_objects)
-# def cumulative_object_counting_y_axis(input_video, detection_graph, category_index,
-#                                       is_color_recognition_enabled, roi, deviation):
-#object_counting_api.object_counting(input_video, detection_graph, category_index, is_color_recognition_enabled, fps, width, height) # counting all the objects
