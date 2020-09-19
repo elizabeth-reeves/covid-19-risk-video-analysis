@@ -415,7 +415,7 @@ def targeted_object_counting(input_video, detection_graph, category_index, is_co
         height = 0
         width = 0
         with detection_graph.as_default():
-          with tf.Session(graph=detection_graph) as sess:
+          with tf.compat.v1.Session(graph=detection_graph) as sess:
             # Definite input and output Tensors for detection_graph
             image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
 
@@ -466,7 +466,7 @@ def targeted_object_counting(input_video, detection_graph, category_index, is_co
                 else:
                     cv2.putText(input_frame, the_result, (10, 35), font, 0.8, (0,255,255),2,cv2.FONT_HERSHEY_SIMPLEX)
                 
-                #cv2.imshow('object counting',input_frame)
+                cv2.imshow('object counting',input_frame)
 
                 output_movie.write(input_frame)
                 print ("writing frame")

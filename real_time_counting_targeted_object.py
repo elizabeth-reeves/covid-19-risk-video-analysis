@@ -21,7 +21,7 @@ detection_graph, category_index = backbone.set_model('ssd_mobilenet_v1_coco_2018
 #object_counting_api.object_counting(input_video, detection_graph, category_index, 1) # for counting all the objects, enabled color prediction
 
 
-targeted_objects = "person, bicycle" # (for counting targeted objects) change it with your targeted objects
+targeted_objects = "person" # (for counting targeted objects) change it with your targeted objects
 is_color_recognition_enabled = 0
 
 object_counting_api.targeted_object_counting(input_video, detection_graph, category_index, is_color_recognition_enabled, targeted_objects) # targeted objects counting
