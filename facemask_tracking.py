@@ -23,8 +23,12 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
     # input video
     cap = cv2.VideoCapture(input_video)
 
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    # new_width = min(600, width)
+    # new_height = int(new_width / width) * height
+
+
 
     roi_position = int(roi * width)
 
@@ -58,13 +62,17 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
             num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
             # for all the frames that are extracted from input video
+            previous_frame = False
             while True:
+
                 ret, frame = cap.read()
 
                 if not ret:
                     print("end of the video file...")
                     break
 
+                # input_frame = cv2.resize(frame, (new_width, new_height), interpolation = cv2.INTER_AREA)
+                # cap = cv2.resize(cap, (new_width, new_height))
                 input_frame = frame
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -97,6 +105,11 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
                     deviation=deviation,
                     use_normalized_coordinates=True,
                     line_thickness=4)
+
+                # if previous_frame:
+                #     counter -= 1
+                #
+                # previous_frame = counter > 0
 
                 # detect_mask_image.mask_image_filename('face_mask_detection/images/pic1.jpeg')
 
@@ -191,10 +204,10 @@ def run():
                     default=0,
                     help="path to input video")
     ap.add_argument("-r", "--roi",
-                    default=0.5,
+                    default=0.48,
                     help="position of ROI")
     ap.add_argument("-d", "--deviation",
-                    default=1,
+                    default=12,
                     help="margin from ROI for detection")
     args = vars(ap.parse_args())
 
