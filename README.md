@@ -110,4 +110,10 @@ A full example of using all the above parameters may be seen below:
 python custom_social_distance_detection.py --prototxt SSD_MobileNet_prototxt.txt --model SSD_MobileNet.caffemodel --labels class_labels.txt --video .\covid_masks.gif --focal 500 --record 1
 ```
 
+## Framework
+Both, the Object Counting framework and the Social Distancing framework are processed by SSD MobileNetv1 to take advantage of its lightweight operations for real-time tracking.
+
+As for the Face Mask Detection architecture, input data is processed through MobileNetV2 with SSD to take advantage of residual operations, which increase accuracy at a low trade-off for speed
+
+
 
