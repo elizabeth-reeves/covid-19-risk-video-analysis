@@ -1,6 +1,9 @@
 # Covid-19 Risk Video Analysis
 This is an integration of a social distancing algorithm, a face mask detecting algorithm, and a person detecting algorithm. It is designed to track the number of people who pass through a video clip, including whether or not they are wearing masks, and whether or not they are social distancing. It will annotate the video frame by frame with this analysis, and can display the annotation live, or write it to an output file .avi file. Finally, when the video stream ends, it will write a csv of data to a specified output file location, including time series data for all frames of the video, and a calculated Risk Index between 0 and 100.
 
+![Coranet.tech](www.coranet.tech)
+
+
 ## Requirements
 Found in requirements.txt. User must install:
 - tensorflow>=1.15.2
