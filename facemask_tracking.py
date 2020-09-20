@@ -23,6 +23,7 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
     # input video
     cap = cv2.VideoCapture(input_video)
 
+
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     # new_width = min(600, width)
@@ -62,17 +63,14 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
             num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
             # for all the frames that are extracted from input video
-            previous_frame = False
-            while True:
 
+            while True:
                 ret, frame = cap.read()
 
                 if not ret:
                     print("end of the video file...")
                     break
 
-                # input_frame = cv2.resize(frame, (new_width, new_height), interpolation = cv2.INTER_AREA)
-                # cap = cv2.resize(cap, (new_width, new_height))
                 input_frame = frame
 
                 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -82,9 +80,6 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
                 (boxes, scores, classes, num) = sess.run(
                     [detection_boxes, detection_scores, detection_classes, num_detections],
                     feed_dict={image_tensor: image_np_expanded})
-
-                # insert information text to video frame
-                font = cv2.FONT_HERSHEY_SIMPLEX
 
 
                 (locs, preds) = detect_mask_image.detect_and_predict_mask(input_frame, net, model)
@@ -106,12 +101,6 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
                     use_normalized_coordinates=True,
                     line_thickness=4)
 
-                # if previous_frame:
-                #     counter -= 1
-                #
-                # previous_frame = counter > 0
-
-                # detect_mask_image.mask_image_filename('face_mask_detection/images/pic1.jpeg')
 
                 label = ''
                 for (box, pred) in zip(locs, preds):
@@ -200,14 +189,17 @@ def cumulative_facemask_counting(input_video, detection_graph, category_index,
 
 def run():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-v", "--video",
+    ap.add_argument("-i", "--input",
                     default=0,
                     help="path to input video")
+    ap.add_argument("-t", '--type',
+                    default='v',
+                    help="image (i) or video (v) input type")
     ap.add_argument("-r", "--roi",
                     default=0.48,
                     help="position of ROI")
     ap.add_argument("-d", "--deviation",
-                    default=12,
+                    default=10,
                     help="margin from ROI for detection")
     args = vars(ap.parse_args())
 
@@ -220,9 +212,20 @@ def run():
 
     is_color_recognition_enabled = 0
 
-    cumulative_facemask_counting(args["video"], detection_graph, category_index,
-                                 is_color_recognition_enabled, args["roi"], args["deviation"],
-                                 targeted_objects="person")
+    if args["type"] == "v":
+        # handle the case where the input is a camera id for streaming
+        if args["input"].isdecimal():
+            input_source = int(args["input"])
+        else:
+            input_source = args["input"]
+        cumulative_facemask_counting(input_source, detection_graph, category_index,
+                                     is_color_recognition_enabled, args["roi"], args["deviation"],
+                                     targeted_objects="person")
+    else:
+        # the input is an image type (must be specified; video is assumed)
+        detect_mask_image.mask_image_filename(args["input"])
+
+
 
 
 if __name__ == "__main__":
