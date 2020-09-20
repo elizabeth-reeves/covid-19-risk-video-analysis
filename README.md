@@ -14,15 +14,47 @@ Found in requirements.txt. User must install:
 - scikit-learn>=0.23.1
 - pillow>=7.2.0
 
+## Demo:
+This is an example of the mask detection functionality being run on the live stream from a laptop camera.
+![gif1](./embedded/demoGif.gif)
+
 ## Methodology
 
-## Usage (DEPRECATED):
-The main function called is facemask_tracking.py. This file optionally takes as input a prerecorded video, or a camera id; if no video or camera id is provided as input, it will by default run on the video stream from the default camera of the device. 
 
-- "--video" or "-v" is a flag available to specify an input source for video. It can be passed "0" to use the default camera for video streaming, a different camera id if known, or a relative or absolute path to a prerecorded video. Extensions supported include .avi, .mp4, and .mov
+## Usage:
+Before running any main functions, run the command `<pip3 install -r requirements.txt>` (or `<pip install -r requirements.txt>`, depending on your python environment).
+
+The main function for video and image processing facemask_tracking.py. This file optionally takes as input a prerecorded video, a preexisting image, or a camera id; if no video, image, or camera id is provided as input, it will by default run on the video stream from the default camera of the device. 
+
+#### Parameters and Flags:
+
+- "--input" or "-i" is a flag available to specify an input source for video or images. It can be passed "0" to use the default camera for video streaming, a different camera id if known, or a relative or absolute path to a prerecorded video. Extensions supported include .avi, .mp4, and .mov for video, and .jpg, .jpeg, and .png for static image.
 ```bash
-python3 facemask_tracking.py -v 0
-python3 facemask_tracking.py --video ./input_images_and_videos/pedestrian_survaillance.mp4
+python3 facemask_tracking.py -i 0
+python3 facemask_tracking.py --input ./input_images_and_videos/pedestrian_survaillance.mp4
+```
+
+- "--type" or "-t" is a flag available to specify whether the input is a video ("video"), or an image("image"). The default, if no type is specified, is "video".
+```bash
+python3 facemask_tracking.py -i 0 --type video
+python3 facemask_tracking.py --input ./input_images_and_videos/pedestrian_survaillance.mp4 -t video
+python3 facemask_tracking.py --input ./images/pic1.jpeg --type image
+```
+
+- "--live_view" or "-l" is a flag to indicate whether the annotated frames of the input video will be displayed as they are created. The default is True. If this is changed to anything but True, then no real-time display of annotated frames will occur.
+```bash
+python3 facemask_tracking.py -l False
+```
+
+- "--csv_out" or "-c" is a parameter to specify the path where a csv of output data will be written. Any file already at the output path will be overwritten. The default is `<./output.csv>`. If `<None>` is passed, there will be no output.
+```bash
+python3 facemask_tracking.py --csv_out None
+python3 facemask_tracking.py -c ./new_output.csv
+```
+
+- "--video_out" or "-v" is a parameter to specify the path where the video output will be stored. The default value is "False", indicating that no video output will be created.
+```bash
+python3 facemask_tracking.py --video_out ./output_video.avi
 ```
 
 - "--roi" or "-r" is a flag available to specify the relative position of the ROI (region of interest) within the frames being analyzed. By default, it is 0.5, indicating that the ROI will be a vertical line in the middle of the frame. This should be a value between 0 and 1.
@@ -37,12 +69,15 @@ python3 facemask_tracking.py --deviation 10
 python3 facemask_tracking.py -r 0.4 -d 15
 ```
 
+#### Combined example:
+```bash
+python3 facemask_tracking.py -i ./input_images_and_videos/traffic_light.mp4 -c ./new_output.csv -v ./output_video.avi -r 0.8 -d 15
+```
+
+
 ## Tuning the detection algorithms
 There is a tradeoff between detecting a single person more than once (multiple detections) and not detecting a person at all (zero detections). This tradeoff relies on the fps (frames per second) of the video, and on the value of --deviation. The larger --deviation is, the more likely we are to count a single person multiple times, and the less likely we are to miss anyone. With higher fps, it is possible to decrease the value of the deviation, decreasing the area of detection, and thus reduce the number of mulitple-counts we get, without missing individuals.
 
-
-## Demo:
-![gif1](./embedded/demoGif.gif)
 
 
 ## Face Mask Model Sourced From:
@@ -50,30 +85,3 @@ There is a tradeoff between detecting a single person more than once (multiple d
 
 ## Base Object Detection API Sourced From:
 [TensorFlow Object Counting API](https://github.com/ahmetozlu/tensorflow_object_counting_api) by [Ahmet Özlü](https://github.com/ahmetozlu), 2018.
-
-
-
-ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--input",
-                    default=0,
-                    help="path to input video")
-    ap.add_argument("-t", '--type',
-                    default='v',
-                    help="image (i) or video (v) input type")
-    ap.add_argument("-r", "--roi",
-                    default=0.48,
-                    help="position of ROI")
-    ap.add_argument("-d", "--deviation",
-                    default=10,
-                    help="margin from ROI for detection")
-    ap.add_argument("-c", "--csv_out",
-                    default="./output.csv",
-                    help="file path where output csv will be written")
-    ap.add_argument("-v", "--video_out",
-                    default=False,
-                    help="file path where output annotated video will be written")
-    ap.add_argument("-l", "--live_view",
-                    default=True,
-                    help="whether the annotated frames will be displayed as they are produced"
-                    )
-    args = vars(ap.parse_args())
