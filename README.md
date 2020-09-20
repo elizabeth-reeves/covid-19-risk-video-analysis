@@ -16,7 +16,7 @@ Found in requirements.txt. User must install:
 
 ## Methodology
 
-## Usage:
+## Usage (DEPRECATED):
 The main function called is facemask_tracking.py. This file optionally takes as input a prerecorded video, or a camera id; if no video or camera id is provided as input, it will by default run on the video stream from the default camera of the device. 
 
 - "--video" or "-v" is a flag available to specify an input source for video. It can be passed "0" to use the default camera for video streaming, a different camera id if known, or a relative or absolute path to a prerecorded video. Extensions supported include .avi, .mp4, and .mov
@@ -50,3 +50,30 @@ There is a tradeoff between detecting a single person more than once (multiple d
 
 ## Base Object Detection API Sourced From:
 [TensorFlow Object Counting API](https://github.com/ahmetozlu/tensorflow_object_counting_api) by [Ahmet Özlü](https://github.com/ahmetozlu), 2018.
+
+
+
+ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--input",
+                    default=0,
+                    help="path to input video")
+    ap.add_argument("-t", '--type',
+                    default='v',
+                    help="image (i) or video (v) input type")
+    ap.add_argument("-r", "--roi",
+                    default=0.48,
+                    help="position of ROI")
+    ap.add_argument("-d", "--deviation",
+                    default=10,
+                    help="margin from ROI for detection")
+    ap.add_argument("-c", "--csv_out",
+                    default="./output.csv",
+                    help="file path where output csv will be written")
+    ap.add_argument("-v", "--video_out",
+                    default=False,
+                    help="file path where output annotated video will be written")
+    ap.add_argument("-l", "--live_view",
+                    default=True,
+                    help="whether the annotated frames will be displayed as they are produced"
+                    )
+    args = vars(ap.parse_args())
