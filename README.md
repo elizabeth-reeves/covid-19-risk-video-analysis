@@ -18,6 +18,8 @@ Found in requirements.txt. User must install:
 This is an example of the mask detection functionality being run on the live stream from a laptop camera.
 ![gif1](./embedded/demoGif.gif)
 
+![gif2](./embedded/edited_covid_masks.gif)
+
 ## Methodology
 
 
@@ -85,3 +87,27 @@ There is a tradeoff between detecting a single person more than once (multiple d
 
 ## Base Object Detection API Sourced From:
 [TensorFlow Object Counting API](https://github.com/ahmetozlu/tensorflow_object_counting_api) by [Ahmet Özlü](https://github.com/ahmetozlu), 2018.
+
+## Social Distance Detection
+The Social Distance Detection model is lightweight and accurate. The model can easily be executed in live-stream by running the following command:
+```bash
+python custom_social_distance_detection.py --prototxt SSD_MobileNet_prototxt.txt --model SSD_MobileNet.caffemodel --labels class_labels.txt 
+```
+### Parameters
+The parameters give the user the flexibility to:
+
+* edit a video, gif, or live-stream
+* record the edited output
+* adjust focal length to one's personal camera
+* adjust the minimum confidence threshold
+* select a custom caffe model
+* select their own proto txt 
+* select one's own custom labels
+
+A full example of using all the above parameters may be seen below:
+
+```bash
+python custom_social_distance_detection.py --prototxt SSD_MobileNet_prototxt.txt --model SSD_MobileNet.caffemodel --labels class_labels.txt --video .\covid_masks.gif --focal 500 --record 1
+```
+
+
