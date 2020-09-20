@@ -89,9 +89,9 @@ There is a tradeoff between detecting a single person more than once (multiple d
 [TensorFlow Object Counting API](https://github.com/ahmetozlu/tensorflow_object_counting_api) by [Ahmet Özlü](https://github.com/ahmetozlu), 2018.
 
 ## Social Distance Detection
-The Social Distance Detection model is lightweight and accurate. The model can easily be executed in live-stream by running the following command:
+The Social Distance Detection model is lightweight and accurate. The model can easily execute a video or gif by running a similar command to below:
 ```bash
-python custom_social_distance_detection.py --prototxt SSD_MobileNet_prototxt.txt --model SSD_MobileNet.caffemodel --labels class_labels.txt 
+python custom_social_distance_detection.py --prototxt SSD_MobileNet_prototxt.txt --model SSD_MobileNet.caffemodel --labels class_labels.txt --video video_file.mp4
 ```
 ### Parameters
 The parameters give the user the flexibility to:
@@ -109,6 +109,65 @@ A full example of using all the above parameters may be seen below:
 ```bash
 python custom_social_distance_detection.py --prototxt SSD_MobileNet_prototxt.txt --model SSD_MobileNet.caffemodel --labels class_labels.txt --video .\covid_masks.gif --focal 500 --record 1
 ```
+
+### Output
+At each frame, social distance captures the following statistics:
+
+* ID of current Frame
+* Confidence of detected ROIs
+* Center pixel coordinates of ROIs
+* top-left and bottom-right 
+* raw 3d coordinates
+
+An example can be seen below
+```bash
+------------------------------------------------------------
+{'master_ID': [],
+ 'master_conf': [],
+ 'master_pixel_cntr_coords': [],
+ 'master_pixel_coords': [],
+ 'master_raw_coords': []}
+------------------------------------------------------------
+{'master_ID': [],
+ 'master_conf': [],
+ 'master_pixel_cntr_coords': [],
+ 'master_pixel_coords': [],
+ 'master_raw_coords': []}
+------------------------------------------------------------
+{'master_ID': [[17]],
+ 'master_conf': [dict_values([0.84979296])],
+ 'master_pixel_cntr_coords': [dict_values([(380.0, 366.0)])],
+ 'master_pixel_coords': [dict_values([(354, 289, 406, 443)])],
+ 'master_raw_coords': [dict_values([(-407.1428571428571, -392.1428571428571, -968.5714285714286)])]}
+------------------------------------------------------------
+{'master_ID': [[17], [18]],
+ 'master_conf': [dict_values([0.84979296]), dict_values([0.8004967])],
+ 'master_pixel_cntr_coords': [dict_values([(380.0, 366.0)]),
+                              dict_values([(382.5, 366.0)])],
+ 'master_pixel_coords': [dict_values([(354, 289, 406, 443)]),
+                         dict_values([(357, 296, 408, 436)])],
+ 'master_raw_coords': [dict_values([(-407.1428571428571, -392.1428571428571, -968.5714285714286)]),
+                       dict_values([(-450.8035714285714, -431.35714285714283, -1065.4285714285713)])]}
+------------------------------------------------------------
+{'master_ID': [[17], [18]],
+ 'master_conf': [dict_values([0.84979296]), dict_values([0.8004967])],
+ 'master_pixel_cntr_coords': [dict_values([(380.0, 366.0)]),
+                              dict_values([(382.5, 366.0)])],
+ 'master_pixel_coords': [dict_values([(354, 289, 406, 443)]),
+                         dict_values([(357, 296, 408, 436)])],
+ 'master_raw_coords': [dict_values([(-407.1428571428571, -392.1428571428571, -968.5714285714286)]),
+                       dict_values([(-450.8035714285714, -431.35714285714283, -1065.4285714285713)])]}
+------------------------------------------------------------
+{'master_ID': [[17], [18]],
+ 'master_conf': [dict_values([0.84979296]), dict_values([0.8004967])],
+ 'master_pixel_cntr_coords': [dict_values([(380.0, 366.0)]),
+                              dict_values([(382.5, 366.0)])],
+ 'master_pixel_coords': [dict_values([(354, 289, 406, 443)]),
+                         dict_values([(357, 296, 408, 436)])],
+ 'master_raw_coords': [dict_values([(-407.1428571428571, -392.1428571428571, -968.5714285714286)]),
+                       dict_values([(-450.8035714285714, -431.35714285714283, -1065.4285714285713)])]}
+```
+
 
 ## Framework
 Both, the Object Counting framework and the Social Distancing framework are processed by SSD MobileNetv1 to take advantage of its lightweight operations for real-time tracking.
